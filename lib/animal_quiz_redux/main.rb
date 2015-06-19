@@ -14,7 +14,7 @@ module AnimalQuizRedux
 		attr_reader :interface
 		attr_reader :default_question
 
-		def initialize interface, default_question = QuestionNode.new 'elephant'
+		def initialize interface, default_question = QuestionNode.new('elephant')
 			@interface = interface
 			@default_question = default_question
 		end
@@ -32,7 +32,7 @@ module AnimalQuizRedux
 		def answer answer, question
 			converted_answer = answer == 'y'
 			return ask question.next(converted_answer) unless question.last?
-			return update_knowledge question, answer if question.last? && !converted_answer
+			return update_knowledge question, answer if question.last? unless converted_answer
 			return win_game question if question.last? && converted_answer
 		end
 
