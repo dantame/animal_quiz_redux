@@ -14,9 +14,9 @@ module AnimalQuizRedux
 		attr_reader :interface
 		attr_reader :default_question
 
-		def initialize interface
+		def initialize interface, default_question = QuestionNode.new 'elephant'
 			@interface = interface
-			@default_question = QuestionNode.new 'elephant'
+			@default_question = default_question
 		end
 
 		def start
