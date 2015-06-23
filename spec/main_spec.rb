@@ -79,23 +79,15 @@ module AnimalQuizRedux
     end
 
     context '#play_again' do
-      it 'restarts with the default question if the user wants to play again' do
+      it 'returns the users answer to the play_again question' do
         allow(console).to receive(:read).and_return('y')
         allow(console).to receive(:write)
-        expect(subject).to receive(:start).once
-        subject.play_again
+        expect(subject.play_again).to be(true)
       end
 
       it 'asks the user if they want to play again' do
         allow(console).to receive(:read).and_return('n')
         expect(console).to receive(:write).with(described_class::PLAY_AGAIN)
-        subject.play_again
-      end
-
-      it 'doesn\'t restart the game if the user doesn\'t want to play again' do
-        allow(console).to receive(:read).and_return('n')
-        allow(console).to receive(:write)
-        expect(subject).to_not receive(:start)
         subject.play_again
       end
     end

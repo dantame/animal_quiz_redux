@@ -19,7 +19,12 @@ module AnimalQuizRedux
 			@default_question = default_question
 		end
 
-		def start question = @default_question
+		def start
+			play @default_question
+			start if play_again
+		end
+
+		def play question = @default_question
 			ask question
 			answer = interface.read == 'y'
 
@@ -30,10 +35,8 @@ module AnimalQuizRedux
 					update_knowledge question
 				end
 			else
-				start question.next(answer)
+				play question.next(answer)
 			end
-
-			play_again
 		end
 
 		def ask question
@@ -66,8 +69,6 @@ module AnimalQuizRedux
 		def play_again
 			interface.write PLAY_AGAIN
 			answer = interface.read == 'y'
-
-			start if answer
 		end
 
 		def win_game question
