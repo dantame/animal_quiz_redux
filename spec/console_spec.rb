@@ -6,14 +6,6 @@ module AnimalQuizRedux
 
     subject { described_class.new }
 
-    context 'Input' do
-      it 'receives input and removes the last character' do
-        # allow(STDIN).to receive(:gets) {"test\n"}
-
-        # expect(subject.read).to eq('test')
-      end
-    end
-
     context 'Output' do
       it 'outputs a message to stdout' do
         msg = 'test'

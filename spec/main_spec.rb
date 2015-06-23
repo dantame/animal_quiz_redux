@@ -58,6 +58,17 @@ module AnimalQuizRedux
         expect(subject.default_question.to_s).to eq(question)
       end
 
+      it 'adds a question to the tree after the default question' do
+        mock_question = QuestionNode.new 'Must it continue swimming to survive?'
+        mock_parent_question = QuestionNode.new question
+        mock_parent_question.add(QuestionNode.new(animal), true)
+        mock_parent_question.add(QuestionNode.new(mock_question), false)
+        allow(console).to receive(:read).and_return(animal, question, answer)
+        allow(console).to receive(:write)
+        subject.update_knowledge(mock_question)
+        expect(mock_question.parent).to eq(mock_parent_question)
+      end
+
       it 'asks the user questions to get information' do
         allow(console).to receive(:read).and_return(animal, question, answer)
         expect(console).to receive(:write).with(described_class::WHICH_ANIMAL_DID_YOU_THINK_OF).ordered

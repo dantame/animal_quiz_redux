@@ -1,7 +1,5 @@
 module AnimalQuizRedux
 	class Node
-		include Enumerable
-
 		attr_reader :value, :left, :right
 		attr_accessor :parent
 
@@ -20,10 +18,9 @@ module AnimalQuizRedux
 		end
 
 		def == other_object
-			return other_object.is_a?(self.class) &&
-				other_object.left == self.left &&
-				other_object.right == self.right &&
-				other_object.value == self.value
+			other_object.left.to_s == self.left.to_s &&
+			other_object.right.to_s == self.right.to_s &&
+			other_object.value.to_s == self.value.to_s
 		end
 
 		def to_s
@@ -40,12 +37,6 @@ module AnimalQuizRedux
 			end
 
 			replacement.parent = self
-		end
-
-		def each &block
-			left.each &block if left
-			block.call self
-			right.each &block if right
 		end
 
 		def last?

@@ -21,16 +21,6 @@ shared_examples 'it is a node' do
       expect(subject.last?).to be(false)
     end
 
-    it 'checks equality between two similar objects' do
-      subject2 = described_class.new value
-
-      expect(subject == subject2).to be(true)
-
-      subject2.left = described_class.new 'left'
-
-      expect(subject == subject2).to be(false)
-    end
-
   end
 
   context 'replace nodes' do
