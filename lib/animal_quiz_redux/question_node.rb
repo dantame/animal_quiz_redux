@@ -18,5 +18,10 @@ module AnimalQuizRedux
 			return incorrect unless answer
 		end
 
+		def add question, answer
+			question.parent.replace(question, self) if question.parent
+			answer ? self.correct = question : self.incorrect = question
+		end
+
 	end
 end

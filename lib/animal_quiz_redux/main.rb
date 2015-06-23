@@ -19,45 +19,48 @@ module AnimalQuizRedux
 			@default_question = default_question
 		end
 
-		def start
-			ask default_question
+		def start question = @default_question
+			ask question
+			answer = interface.read == 'y'
+
+			if question.last?
+				if answer
+					win_game question
+				else
+					update_knowledge question
+				end
+			else
+				start question.next(answer)
+			end
+
+			play_again
 		end
 
 		def ask question
-			interface.write question.to_s unless question.last?
-			interface.write IS_IT_A % question.to_s if question.last?
-			answer interface.read, question
+			if question.last?
+				interface.write IS_IT_A % question.to_s
+			else
+				interface.write question.to_s
+			end
 		end
 
-		def answer answer, question
-			converted_answer = answer == 'y'
-			return ask question.next(converted_answer) unless question.last?
-			return update_knowledge question, answer if question.last? unless converted_answer
-			return win_game question if question.last? && converted_answer
-		end
-
-		def update_knowledge question, answer
+		def update_knowledge question
 			interface.write WHICH_ANIMAL_DID_YOU_THINK_OF
 			new_animal = interface.read
+
 			interface.write WHAT_QUESTION_WOULD_YOU_ASK
 			question_text = interface.read
+			
 			interface.write WHAT_IS_THE_ANSWER
 			question_answer = interface.read == 'y'
 
 			new_question = QuestionNode.new question_text
 			animal_question = QuestionNode.new new_animal
 
-			if question_answer
-				new_question.correct = animal_question
-				new_question.incorrect = question
-			else
-				new_question.correct = question
-				new_question.incorrect = animal_question
-			end
+			new_question.add question, !question_answer
+			new_question.add animal_question, question_answer
 
-			@default_question = new_question
-			
-			play_again
+			@default_question = new_question if question == @default_question
 		end
 
 		def play_again
@@ -69,8 +72,6 @@ module AnimalQuizRedux
 
 		def win_game question
 			interface.write WIN_GAME % question.to_s
-
-			play_again
 		end
 
 	end
